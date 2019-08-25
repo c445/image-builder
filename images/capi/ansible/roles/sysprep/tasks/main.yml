@@ -21,6 +21,10 @@
 - import_tasks: photon.yml
   when: ansible_os_family == "VMware Photon OS"
 
+- name: set Ubuntu pw
+  command: |-
+    echo 'ubuntu:ubuntu' | chpasswd -c SHA512
+
 - name: Truncate machine id
   file:
     state: "{{ item.state }}"
@@ -161,6 +165,7 @@
     owner: root
     group: root
   when: kubernetes_semver != '' and (ansible_os_family == "VMware Photon OS" or ansible_distribution == "Amazon") # Ensure audit log is not created for HA Proxy images, since this task is shared amongst build targets
+
 
 - name: Truncate shell history
   file:
