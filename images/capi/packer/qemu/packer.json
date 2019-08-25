@@ -18,12 +18,12 @@
       "iso_checksum": "{{user `iso_checksum_type`}}:{{user `iso_checksum`}}",
       "iso_url": "{{user `iso_url`}}",
       "memory": "{{user `memory`}}",
-      "net_device": "virtio-net",
+      "net_device": "{{user `net_device`}}",
       "output_directory": "{{user `output_directory`}}",
       "qemu_binary": "{{user `qemu_binary`}}",
       "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S -E sh -c 'usermod -L {{user `ssh_username`}} && {{user `shutdown_command`}}'",
       "ssh_password": "{{user `ssh_password`}}",
-      "ssh_timeout": "2h",
+      "ssh_timeout": "{{user `ssh_timeout`}}",
       "ssh_username": "{{user `ssh_username`}}",
       "type": "qemu",
       "vm_name": "{{user `build_name`}}-kube-{{user `kubernetes_semver`}}"
@@ -74,6 +74,27 @@
         "{{user `custom_post_processor_command`}}"
       ],
       "name": "custom-post-processor",
+      "type": "shell-local"
+    },
+    {
+      "custom_data": {
+        "build_date": "{{isotime}}",
+        "build_timestamp": "{{user `build_timestamp`}}",
+        "capi_version": "{{user `capi_version`}}",
+        "iso_checksum": "{{user `iso_checksum`}}",
+        "iso_checksum_type": "{{user `iso_checksum_type`}}",
+        "iso_url": "{{user `iso_url`}}",
+        "kubernetes_cni_semver": "{{user `kubernetes_cni_semver`}}",
+        "kubernetes_semver": "{{user `kubernetes_semver`}}",
+        "kubernetes_source_type": "{{user `kubernetes_source_type`}}",
+        "os_name": "{{user `os_display_name`}}"
+      },
+      "output": "{{user `output_directory`}}/packer-manifest.json",
+      "strip_path": true,
+      "type": "manifest"
+    },
+    {
+      "command": "./hack/image-build-vmdk-optimize-qcow2.sh {{user `output_directory`}}",
       "type": "shell-local"
     }
   ],
@@ -134,19 +155,21 @@
     }
   ],
   "variables": {
-    "accelerator": "kvm",
+    "accelerator": "none",
     "ansible_common_vars": "",
     "ansible_extra_vars": "ansible_python_interpreter=/usr/bin/python3",
     "boot_wait": "10s",
     "build_timestamp": "{{timestamp}}",
+    "capi_version": "v1alpha1",
     "containerd_sha256": null,
     "containerd_url": "https://github.com/containerd/containerd/releases/download/v{{user `containerd_version`}}/cri-containerd-cni-{{user `containerd_version`}}-linux-amd64.tar.gz",
     "containerd_version": null,
-    "cpus": "1",
+    "cpus": "2",
     "crictl_url": "https://github.com/kubernetes-sigs/cri-tools/releases/download/v{{user `crictl_version`}}/crictl-v{{user `crictl_version`}}-linux-amd64.tar.gz",
     "crictl_version": null,
-    "disk_size": "20480",
+    "disk_size": "10240",
     "existing_ansible_ssh_args": "{{env `ANSIBLE_SSH_ARGS`}}",
+    "extra_repos": "",
     "firmware": "",
     "format": "qcow2",
     "headless": "true",
@@ -168,11 +191,22 @@
     "kubernetes_series": null,
     "kubernetes_source_type": null,
     "machine_id_mode": "444",
-    "memory": "2048",
+    "memory": "4096",
+    "net_device": "virtio-net",
+    "network": "nat",
     "output_directory": "./output/{{user `build_name`}}-kube-{{user `kubernetes_semver`}}",
     "python_path": "",
     "qemu_binary": "qemu-system-x86_64",
+    "reenable_public_repos": "true",
+    "remove_extra_repos": "false",
     "ssh_password": "builder",
-    "ssh_username": "builder"
+    "ssh_username": "builder",
+    "ssh_timeout": "4h",
+    "skip_compaction": "false",
+    "vmx_version": "13",
+    "vnc_bind_address": "127.0.0.1",
+    "vnc_disable_password": "false",
+    "vnc_port_max": "6000",
+    "vnc_port_min": "5900"
   }
 }
