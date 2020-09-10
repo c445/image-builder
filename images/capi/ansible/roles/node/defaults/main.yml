@@ -29,8 +29,10 @@ common_rpms:
 - yum-utils
 
 common_debs:
-- apt-transport-https
 - conntrack
+- openssh-client
+- openssh-server
+- apt-transport-https
 - curl
 - ebtables
 - jq
