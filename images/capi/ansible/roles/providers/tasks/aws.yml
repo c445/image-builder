@@ -19,7 +19,7 @@
   vars:
     packages:
       - awscli
-  when: ansible_distribution != "Amazon"
+  # when: ansible_distribution != "Amazon" # we want to ensure that the awscli is installed.
 
 - name: install aws agents RPM
   package:
