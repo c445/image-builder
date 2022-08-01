@@ -61,7 +61,9 @@
         "--extra-vars",
         "{{user `ansible_common_vars`}}",
         "--extra-vars",
-        "{{user `ansible_extra_vars`}}"
+        "{{user `ansible_extra_vars`}}",
+        "--extra-vars",
+        "{{user `ansible_user_vars`}}"
       ],
       "playbook_file": "./ansible/node.yml",
       "type": "ansible",
@@ -102,6 +104,7 @@
     "accelerator": "kvm",
     "ansible_common_vars": "",
     "ansible_extra_vars": "ansible_python_interpreter=/usr/bin/python3",
+    "ansible_user_vars": "",
     "boot_media_path": "http://{{ .HTTPIP }}:{{ .HTTPPort }}",
     "boot_wait": "10s",
     "build_timestamp": "{{timestamp}}",
