@@ -13,19 +13,20 @@ autoinstall:
         size: largest
         grub_device: true
         preserve: false
-        ptable: gpt
+        ptable: msdos
+        wipe: superblock
       - type: partition
         id: partition-0
         device: disk-0
-        size: 1M
+        size: 7G
         number: 1
         preserve: false
         grub_device: false
-        flag: bios_grub
+        flag: boot
       - type: partition
         id: partition-1
         device: disk-0
-        size: 7G
+        size: 2G
         number: 2
         preserve: false
         grub_device: false
@@ -33,19 +34,16 @@ autoinstall:
       - type: partition
         id: partition-2
         device: disk-0
-        size: 2G
+        size: -1
         number: 3
         preserve: false
         grub_device: false
         wipe: superblock
-      - type: partition
-        id: partition-3
-        device: disk-0
-        size: -1
-        number: 4
+      - type: format
+        id: format-0
+        volume: partition-0
+        fstype: xfs
         preserve: false
-        grub_device: false
-        wipe: superblock
       - type: format
         id: format-1
         volume: partition-1
@@ -56,22 +54,17 @@ autoinstall:
         volume: partition-2
         fstype: xfs
         preserve: false
-      - type: format
-        id: format-3
-        volume: partition-3
-        fstype: xfs
-        preserve: false
+      - type: mount
+        id: mount-0
+        device: format-0
+        path: /
       - type: mount
         id: mount-1
         device: format-1
-        path: /
+        path: /var/log
       - type: mount
         id: mount-2
         device: format-2
-        path: /var/log
-      - type: mount
-        id: mount-3
-        device: format-3
         path: /var/lib
   updates: 'all'
   ssh:
