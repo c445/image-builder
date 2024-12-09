@@ -18,6 +18,7 @@
     node_custom_roles_pre: ""
     node_custom_roles_post: ""
     custom_role_names: ""
+    ecr_credential_provider: true
 
   tasks:
     - ansible.builtin.include_role:
