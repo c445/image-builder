@@ -18,6 +18,7 @@
     node_custom_roles_pre: ""
     node_custom_roles_post: ""
     custom_role_names: ""
+    ecr_credential_provider: true
 
   tasks:
     - ansible.builtin.include_role:
@@ -38,6 +39,9 @@
     - ansible.builtin.include_role:
         name: load_additional_components
       when: load_additional_components | bool
+    - ansible.builtin.include_role:
+        name: ecr_credential_provider
+      when: ecr_credential_provider | bool
     - ansible.builtin.include_role:
         name: "{{ role }}"
       loop: "{{ custom_role_names.split() + node_custom_roles_post.split() }}"
