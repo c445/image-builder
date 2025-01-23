@@ -1,2 +1,3 @@
 packer.json
 user-data
+user-data.tmpl
