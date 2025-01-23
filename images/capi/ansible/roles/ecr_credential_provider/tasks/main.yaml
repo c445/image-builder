@@ -39,7 +39,7 @@
       ansible.builtin.stat:
         path: "{{ '/etc/default/kubelet' if ansible_os_family == 'Debian' else '/etc/sysconfig/kubelet' }}"
       register: kubelet_config
-      failed_when: not kubelet_config.stat.exists
+      #failed_when: not kubelet_config.stat.exists
 
     - name: Add credential provider flags
       when: kubelet_config.stat.exists
