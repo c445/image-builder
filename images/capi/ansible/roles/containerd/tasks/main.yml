@@ -61,8 +61,18 @@
     state: directory
     mode: "0755"
 
-# TODO(vincepri): This unpacks the entire tar in the root directory
-# we should find a better way to check what's being unpacked and where.
+- name: "Create a directory if it does not exist (sbin)"
+  ansible.builtin.file:
+    path: "{{ sysusr_prefix }}/sbin"
+    state: directory
+    mode: "0755"
+
+- name: "Create a directory if it does not exist (cni)"
+  ansible.builtin.file:
+    path: "/opt/cni/bin"
+    state: directory
+    mode: "0755"
+
 - name: Unpack containerd
   ansible.builtin.unarchive:
     remote_src: true

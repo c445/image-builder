@@ -8,10 +8,6 @@
         "{{user `boot_command_suffix`}}"
       ],
       "boot_wait": "{{user `boot_wait`}}",
-      "cd_files": [
-        "{{user `cd_files`}}"
-      ],
-      "cd_label": "cidata",
       "cpu_model": "{{user `cpu_model`}}",
       "cpus": "{{user `cpus`}}",
       "disk_compression": "{{ user `disk_compression`}}",
@@ -32,7 +28,7 @@
       "qemu_binary": "{{user `qemu_binary`}}",
       "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S -E sh -c 'userdel -f -r {{user `ssh_username`}} && rm -f /etc/sudoers.d/{{user `ssh_username` }} && rm -f /etc/sudoers.d/90-cloud-init-users && {{user `shutdown_command`}}'",
       "ssh_password": "{{user `ssh_password`}}",
-      "ssh_timeout": "2h",
+      "ssh_timeout": "{{user `ssh_timeout`}}",
       "ssh_username": "{{user `ssh_username`}}",
       "type": "qemu",
       "vm_name": "{{user `vm_name`}}",
@@ -150,7 +146,8 @@
         "kubernetes_deb_version": "{{ user `kubernetes_deb_version` }}",
         "kubernetes_rpm_version": "{{ split (user `kubernetes_rpm_version`) \"-\" 0  }}",
         "kubernetes_source_type": "{{user `kubernetes_source_type`}}",
-        "kubernetes_version": "{{user `kubernetes_semver` | replace \"v\" \"\" 1}}"
+        "kubernetes_version": "{{user `kubernetes_semver` | replace \"v\" \"\" 1}}",
+        "install_kubernetes": "{{user `install_kubernetes`}}"
       },
       "version": "{{user `goss_version`}}"
     },
@@ -183,7 +180,7 @@
     "build_timestamp": "{{timestamp}}",
     "cd_files": "linux/base/*.nothing",
     "containerd_version": null,
-    "cpu_model": "host",
+    "cpu_model": "qemu64",
     "containerd_service_url": "https://raw.githubusercontent.com/containerd/containerd/refs/tags/v{{user `containerd_version`}}/containerd.service",
     "runc_version": null,
     "cpus": "1",
@@ -223,6 +220,7 @@
     "qemu_binary": "qemu-system-x86_64",
     "ssh_password": "$SSH_PASSWORD",
     "ssh_username": "builder",
+    "ssh_timeout": "2h",
     "vm_name": "{{user `build_name`}}-kube-{{user `kubernetes_semver`}}",
     "vnc_bind_address": "127.0.0.1"
   }
