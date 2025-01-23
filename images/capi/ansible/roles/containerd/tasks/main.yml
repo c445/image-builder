@@ -48,15 +48,32 @@
     state: directory
     mode: "0755"
 
-# TODO(vincepri): This unpacks the entire tar in the root directory
-# we should find a better way to check what's being unpacked and where.
+- name: "Create a directory if it does not exist (sbin)"
+  ansible.builtin.file:
+    path: "{{ sysusr_prefix }}/sbin"
+    state: directory
+    mode: "0755"
+
+- name: "Create a directory if it does not exist (cni)"
+  ansible.builtin.file:
+    path: "/opt/cni/bin"
+    state: directory
+    mode: "0755"
+
 - name: Unpack containerd
   ansible.builtin.unarchive:
     remote_src: true
     src: /tmp/containerd.tar.gz
-    dest: "{{ containerd_prefix | default('/') }}"
+    dest: "{{ containerd_prefix | default('/usr/local/') }}"
     extra_opts:
       - --no-overwrite-dir
+  when: ansible_os_family != "Flatcar"
+
+- name: "Download runc"
+  ansible.builtin.get_url:
+    url: "{{ runc_url }}"
+    dest: "{{ runc_prefix | default('/usr/local/sbin/') }}runc"
+    mode: "0755"
   when: ansible_os_family != "Flatcar"
 
 # Install containerd Wasm shims specified in a comma-separated string. Known runtimes are 'lunatic', 'slight', 'spin', and 'wws'.
@@ -113,6 +130,13 @@
     path: /etc/systemd/system/containerd.service.d
     state: directory
 
+- name: Create systemd unit file for containerd
+  ansible.builtin.template:
+    dest: /etc/systemd/system/containerd.service
+    src: etc/systemd/system/containerd.service
+    mode: "0600"
+  when: ansible_os_family != "Flatcar"
+
 - name: Create systemd unit drop-in file for containerd to run from /opt/bin
   ansible.builtin.template:
     dest: /etc/systemd/system/containerd.service.d/10-opt-bin-custom.conf
@@ -163,6 +187,9 @@
     dest: /etc/containerd/config.toml
     src: "{{ containerd_config_file }}"
     mode: "0644"
+
+- ansible.builtin.import_tasks: crictl-url.yml
+  when: crictl_source_type == "http"
 
 - name: Copy in crictl config
   ansible.builtin.template:

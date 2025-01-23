@@ -8,11 +8,7 @@
         "{{user `boot_command_suffix`}}"
       ],
       "boot_wait": "{{user `boot_wait`}}",
-      "cd_files": [
-        "{{user `cd_files`}}"
-      ],
-      "cd_label": "cidata",
-      "cpu_model": "host",
+      "cpu_model": "{{user `cpu_model`}}",
       "cpus": "{{user `cpus`}}",
       "disk_compression": "{{ user `disk_compression`}}",
       "disk_discard": "{{user `disk_discard`}}",
@@ -31,7 +27,7 @@
       "qemu_binary": "{{user `qemu_binary`}}",
       "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S -E sh -c 'usermod -L {{user `ssh_username`}} && {{user `shutdown_command`}}'",
       "ssh_password": "{{user `ssh_password`}}",
-      "ssh_timeout": "2h",
+      "ssh_timeout": "{{user `ssh_timeout`}}",
       "ssh_username": "{{user `ssh_username`}}",
       "type": "qemu",
       "vm_name": "{{user `vm_name`}}",
@@ -148,7 +144,8 @@
         "kubernetes_deb_version": "{{ user `kubernetes_deb_version` }}",
         "kubernetes_rpm_version": "{{ split (user `kubernetes_rpm_version`) \"-\" 0  }}",
         "kubernetes_source_type": "{{user `kubernetes_source_type`}}",
-        "kubernetes_version": "{{user `kubernetes_semver` | replace \"v\" \"\" 1}}"
+        "kubernetes_version": "{{user `kubernetes_semver` | replace \"v\" \"\" 1}}",
+        "install_kubernetes": "{{user `install_kubernetes`}}"
       },
       "version": "{{user `goss_version`}}"
     }
@@ -166,9 +163,14 @@
     "containerd_sha256": null,
     "containerd_url": "https://github.com/containerd/containerd/releases/download/v{{user `containerd_version`}}/cri-containerd-cni-{{user `containerd_version`}}-linux-amd64.tar.gz",
     "containerd_version": null,
+    "cpu_model": "qemu64",
     "cpus": "1",
     "crictl_url": "https://github.com/kubernetes-sigs/cri-tools/releases/download/v{{user `crictl_version`}}/crictl-v{{user `crictl_version`}}-linux-amd64.tar.gz",
     "crictl_version": null,
+    "crictl_sha256": null,
+    "crictl_source_type": null,
+    "runc_version": null,
+    "runc_url": "https://github.com/opencontainers/runc/releases/download/v{{user `runc_version`}}/runc.amd64",
     "disk_compression": "false",
     "disk_discard": "unmap",
     "disk_image": "false",
@@ -203,6 +205,7 @@
     "qemu_binary": "qemu-system-x86_64",
     "ssh_password": "$SSH_PASSWORD",
     "ssh_username": "builder",
+    "ssh_timeout": "2h",
     "vm_name": "{{user `build_name`}}-kube-{{user `kubernetes_semver`}}",
     "vnc_bind_address": "127.0.0.1"
   }
