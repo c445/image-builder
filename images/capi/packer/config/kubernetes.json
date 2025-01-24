@@ -23,5 +23,6 @@
   "kubernetes_source_type": "pkg",
   "systemd_prefix": "/usr/lib/systemd",
   "sysusr_prefix": "/usr",
-  "sysusrlocal_prefix": "/usr/local"
+  "sysusrlocal_prefix": "/usr/local",
+  "install_kubernetes": "true"
 }
